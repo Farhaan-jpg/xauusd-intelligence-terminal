@@ -1,0 +1,43 @@
+services:
+  # Free Python Web Service for the Backend API & Analytics Engine
+  - type: web
+    name: xauusd-intelligence-backend
+    env: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: python backend/run.py
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: ENVIRONMENT
+        value: production
+      - key: DEMO_MODE
+        value: true
+      - key: TIMEZONE
+        value: Asia/Kolkata
+      - key: DATABASE_URL
+        value: sqlite:///./terminal.db
+      - key: SECRET_KEY
+        generateValue: true
+
+  # Free Node Web Service for the Next.js Frontend
+  - type: web
+    name: xauusd-intelligence-terminal
+    env: node
+    plan: free
+    region: oregon
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: BACKEND_URL
+        fromService:
+          type: web
+          name: xauusd-intelligence-backend
+          property: host

@@ -1,0 +1,23 @@
+name: Free Render Instance Keep-Alive Ping
+
+on:
+  schedule:
+    # Run every 10 minutes to prevent Render free instance 15-minute spin-down
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render Backend Health Endpoint
+        run: |
+          RENDER_URL="${{ secrets.RENDER_APP_URL || 'https://xauusd-intelligence-backend.onrender.com' }}"
+          echo "Pinging ${RENDER_URL}/api/v1/health to keep instance warm..."
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${RENDER_URL}/api/v1/health")
+          echo "Received HTTP Status: $STATUS"
+          if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 400 ]; then
+            echo "Instance is warm and active."
+          else
+            echo "Warning: Response code $STATUS"
+          fi
