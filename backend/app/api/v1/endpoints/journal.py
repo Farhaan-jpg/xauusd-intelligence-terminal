@@ -193,11 +193,28 @@ def get_analytics(db: Session = Depends(get_db)):
         "worst_setup": "FOMO_CHASE_BREAKOUT (20% Win Rate, Avg R: -1.0)"
     }
 
+from app.providers.ai_provider import ai_provider
+
 @router.get("/weekly-review")
 def get_weekly_review(db: Session = Depends(get_db)):
     analytics = get_analytics(db)
+    trades = db.query(JournalTrade).order_by(JournalTrade.entry_time.desc()).limit(10).all()
+    trade_text = "\n".join([f"- {t.direction} {t.symbol} @ {t.entry_price:.2f} -> {t.exit_price:.2f} (P&L: ${t.net_pnl:.2f}, R: {t.r_multiple:.2f}R, Setup: {t.setup_tag}, Rule: {t.rule_adherence})" for t in trades])
+    
+    ai_coaching = ai_provider.generate_journal_trade_coaching(
+        trade_summary=trade_text or "No trades logged yet.",
+        stats=analytics
+    )
+
+    actionable_rule = ai_coaching.get("text") if ai_coaching.get("success") else "Rule for next week: Strict 15-minute wait rule after any missed breakout; execute only at designated structural pullback zones or stand aside."
+    # Clean up actionable rule if it's multiple lines
+    first_line = actionable_rule.split("\n")[0].replace("#", "").strip()
+    if len(first_line) < 20 and len(actionable_rule.split("\n")) > 1:
+        first_line = actionable_rule.split("\n")[1].replace("#", "").strip()
+
     return {
         "review_period": "Current Week to Date",
+        "ai_coach": f"{ai_coaching.get('provider', 'AI Coach')} ({ai_coaching.get('model', 'gemini')})",
         "what_worked": [
             "Trading London-NY overlap sessions when liquidity and ATR are highest.",
             "Requiring 15m candle close confirmation on key liquidity sweeps before placing limit/market orders.",
@@ -210,5 +227,5 @@ def get_weekly_review(db: Session = Depends(get_db)):
         "most_common_rule_break": "Chasing fast candles after missing optimal liquidity level entry.",
         "best_market_regime": "Trending with EMA 50 alignment (78% Win Rate)",
         "worst_market_regime": "Low-liquidity Asian chop before European open",
-        "actionable_process_improvement": "Rule for next week: Strict 15-minute wait rule after any missed breakout; execute only at designated structural pullback zones or stand aside."
+        "actionable_process_improvement": f"AI Coach Directive: {first_line}"
     }
