@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { Newspaper, CheckCircle2, AlertCircle, ExternalLink, ShieldCheck, Tag } from "lucide-react";
-import { terminalApi } from "@/lib/api";
-import { NewsCatalyst } from "@/types/terminal";
+import { terminalApi } from "../../lib/api";
+import { NewsCatalyst } from "../../types/terminal";
 
 export default function NewsWorkspaceView() {
   const [news, setNews] = useState<NewsCatalyst[]>([]);

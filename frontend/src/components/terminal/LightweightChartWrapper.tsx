@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createChart, IChartApi, ISeriesApi, CandlestickData } from "lightweight-charts";
 import { LineChart, Sliders, Maximize2, Layers, RefreshCw } from "lucide-react";
-import { terminalApi } from "@/lib/api";
+import { terminalApi } from "../../lib/api";
 
 interface ChartProps {
   initialTimeframe?: string;

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Activity, BarChart2, TrendingUp, TrendingDown, Layers, Clock } from "lucide-react";
-import { MarketQuote, SessionInfo } from "@/types/terminal";
+import { MarketQuote, SessionInfo } from "../../types/terminal";
 
 interface MarketSnapshotCardProps {
   quote: MarketQuote | null;

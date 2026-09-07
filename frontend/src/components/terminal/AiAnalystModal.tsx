@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Bot, Sparkles, RefreshCw, X, ShieldAlert, CheckCircle2 } from "lucide-react";
-import { terminalApi } from "@/lib/api";
+import { terminalApi } from "../../lib/api";
 
 interface AiAnalystModalProps {
   isOpen: boolean;

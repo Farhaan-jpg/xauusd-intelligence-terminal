@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Layers, TrendingUp, TrendingDown, Check, AlertCircle } from "lucide-react";
-import { MultiTimeframeData } from "@/types/terminal";
+import { MultiTimeframeData } from "../../types/terminal";
 
 interface MultiTimeframeGridProps {
   data: MultiTimeframeData | null;

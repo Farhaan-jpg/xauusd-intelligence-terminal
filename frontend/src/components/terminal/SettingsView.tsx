@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Sliders, ShieldCheck, Database, Save, Check } from "lucide-react";
-import { terminalApi } from "@/lib/api";
+import { terminalApi } from "../../lib/api";
 
 export default function SettingsView() {
   const [profile, setProfile] = useState<any>(null);

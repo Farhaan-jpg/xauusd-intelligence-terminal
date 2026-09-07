@@ -20,7 +20,7 @@ import {
   Newspaper,
   BookOpen
 } from "lucide-react";
-import { MarketQuote, SessionInfo } from "@/types/terminal";
+import { MarketQuote, SessionInfo } from "../../types/terminal";
 
 interface HeaderProps {
   quote: MarketQuote | null;

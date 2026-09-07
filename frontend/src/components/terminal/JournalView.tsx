@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { BookOpen, PlusCircle, Award, CheckCircle, XCircle, BarChart3, TrendingUp, Sparkles } from "lucide-react";
-import { terminalApi } from "@/lib/api";
-import { JournalTrade } from "@/types/terminal";
+import { terminalApi } from "../../lib/api";
+import { JournalTrade } from "../../types/terminal";
 
 export default function JournalView() {
   const [trades, setTrades] = useState<JournalTrade[]>([]);

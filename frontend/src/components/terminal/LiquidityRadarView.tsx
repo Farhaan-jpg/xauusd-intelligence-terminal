@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { Compass, Target, ArrowDownCircle, ArrowUpCircle, AlertCircle, Layers } from "lucide-react";
-import { terminalApi } from "@/lib/api";
-import { LiquidityLevel } from "@/types/terminal";
+import { terminalApi } from "../../lib/api";
+import { LiquidityLevel } from "../../types/terminal";
 
 export default function LiquidityRadarView() {
   const [levels, setLevels] = useState<LiquidityLevel[]>([]);

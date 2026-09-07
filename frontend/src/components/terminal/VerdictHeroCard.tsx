@@ -14,7 +14,7 @@ import {
   Sparkles,
   Zap
 } from "lucide-react";
-import { ExecutiveVerdict } from "@/types/terminal";
+import { ExecutiveVerdict } from "../../types/terminal";
 
 interface VerdictHeroCardProps {
   verdict: ExecutiveVerdict | null;

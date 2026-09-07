@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { Globe, TrendingUp, TrendingDown, DollarSign, Activity, Percent, ShieldCheck } from "lucide-react";
-import { terminalApi } from "@/lib/api";
-import { MacroScoreResult } from "@/types/terminal";
+import { terminalApi } from "../../lib/api";
+import { MacroScoreResult } from "../../types/terminal";
 
 export default function MacroDashboard() {
   const [drivers, setDrivers] = useState<Record<string, any>>({});

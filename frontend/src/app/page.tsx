@@ -1,25 +1,25 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Header from "@/components/layout/Header";
-import RiskBanner from "@/components/layout/RiskBanner";
-import MarketSnapshotCard from "@/components/terminal/MarketSnapshotCard";
-import VerdictHeroCard from "@/components/terminal/VerdictHeroCard";
-import MultiTimeframeGrid from "@/components/terminal/MultiTimeframeGrid";
-import LightweightChartWrapper from "@/components/terminal/LightweightChartWrapper";
-import MacroDashboard from "@/components/terminal/MacroDashboard";
-import LiquidityRadarView from "@/components/terminal/LiquidityRadarView";
-import EconomicCalendarView from "@/components/terminal/EconomicCalendarView";
-import NewsWorkspaceView from "@/components/terminal/NewsWorkspaceView";
-import TradePlannerWorkspace from "@/components/terminal/TradePlannerWorkspace";
-import JournalView from "@/components/terminal/JournalView";
-import AlertsCenter from "@/components/terminal/AlertsCenter";
-import AnalyticsAccuracyView from "@/components/terminal/AnalyticsAccuracyView";
-import SettingsView from "@/components/terminal/SettingsView";
-import AiAnalystModal from "@/components/terminal/AiAnalystModal";
+import Header from "../components/layout/Header";
+import RiskBanner from "../components/layout/RiskBanner";
+import MarketSnapshotCard from "../components/terminal/MarketSnapshotCard";
+import VerdictHeroCard from "../components/terminal/VerdictHeroCard";
+import MultiTimeframeGrid from "../components/terminal/MultiTimeframeGrid";
+import LightweightChartWrapper from "../components/terminal/LightweightChartWrapper";
+import MacroDashboard from "../components/terminal/MacroDashboard";
+import LiquidityRadarView from "../components/terminal/LiquidityRadarView";
+import EconomicCalendarView from "../components/terminal/EconomicCalendarView";
+import NewsWorkspaceView from "../components/terminal/NewsWorkspaceView";
+import TradePlannerWorkspace from "../components/terminal/TradePlannerWorkspace";
+import JournalView from "../components/terminal/JournalView";
+import AlertsCenter from "../components/terminal/AlertsCenter";
+import AnalyticsAccuracyView from "../components/terminal/AnalyticsAccuracyView";
+import SettingsView from "../components/terminal/SettingsView";
+import AiAnalystModal from "../components/terminal/AiAnalystModal";
 
-import { terminalApi } from "@/lib/api";
-import { MarketQuote, SessionInfo, ExecutiveVerdict, MultiTimeframeData, EconomicEvent } from "@/types/terminal";
+import { terminalApi } from "../lib/api";
+import { MarketQuote, SessionInfo, ExecutiveVerdict, MultiTimeframeData, EconomicEvent } from "../types/terminal";
 
 export default function TerminalPage() {
   const [activeTab, setActiveTab] = useState<string>("command-center");

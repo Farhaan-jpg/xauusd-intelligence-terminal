@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Sliders, DollarSign, ShieldAlert, CheckCircle2, XCircle, HelpCircle, Save } from "lucide-react";
-import { terminalApi } from "@/lib/api";
-import { RiskCalculationResult } from "@/types/terminal";
+import { terminalApi } from "../../lib/api";
+import { RiskCalculationResult } from "../../types/terminal";
 
 export default function TradePlannerWorkspace() {
   const [balance, setBalance] = useState<number>(10000);

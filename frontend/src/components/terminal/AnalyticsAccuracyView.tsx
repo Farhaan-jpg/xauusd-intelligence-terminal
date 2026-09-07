@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { BarChart2, TrendingUp, Award, ShieldAlert, CheckCircle2, XCircle } from "lucide-react";
-import { terminalApi } from "@/lib/api";
+import { terminalApi } from "../../lib/api";
 
 export default function AnalyticsAccuracyView() {
   const [analytics, setAnalytics] = useState<any>(null);

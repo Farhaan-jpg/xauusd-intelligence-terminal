@@ -2,7 +2,7 @@
 
 import React from "react";
 import { AlertOctagon, ShieldAlert, Timer, DollarSign, Activity } from "lucide-react";
-import { EconomicEvent } from "@/types/terminal";
+import { EconomicEvent } from "../../types/terminal";
 
 interface RiskBannerProps {
   nextEvent: EconomicEvent | null;

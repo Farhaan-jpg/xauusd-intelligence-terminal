@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Bell, ShieldAlert, CheckCircle, PlusCircle, AlertTriangle, Clock } from "lucide-react";
-import { terminalApi } from "@/lib/api";
+import { terminalApi } from "../../lib/api";
 
 export default function AlertsCenter() {
   const [alerts, setAlerts] = useState<any[]>([]);

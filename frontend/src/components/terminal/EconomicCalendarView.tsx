@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { Calendar, AlertTriangle, Clock, Timer, Info, HelpCircle } from "lucide-react";
-import { terminalApi } from "@/lib/api";
-import { EconomicEvent } from "@/types/terminal";
+import { terminalApi } from "../../lib/api";
+import { EconomicEvent } from "../../types/terminal";
 
 export default function EconomicCalendarView() {
   const [events, setEvents] = useState<EconomicEvent[]>([]);
