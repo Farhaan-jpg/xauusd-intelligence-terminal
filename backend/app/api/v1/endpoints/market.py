@@ -59,7 +59,9 @@ def get_verdict():
     )
     
     events = calendar_provider.get_calendar_events()
-    next_event = next((e for e in events if e["importance"] in ("HIGH", "CRITICAL")), None)
+    next_event = next((e for e in events if e.get("country") == "USD" and e.get("importance") in ("HIGH", "CRITICAL") and e.get("minutes_until", 0) > 0), None)
+    if not next_event:
+        next_event = next((e for e in events if e.get("importance") in ("HIGH", "CRITICAL") and e.get("minutes_until", 0) > 0), None)
     lockout_status = calendar_provider.get_lockout_status()
     
     verdict = VerdictEngine.generate_verdict(

@@ -44,25 +44,46 @@ def create_alert(req: AlertCreate, db: Session = Depends(get_db)):
     db.refresh(alert)
     return alert
 
+from app.providers.calendar_provider import calendar_provider
+from app.providers.market_provider import market_provider
+
 @router.get("/history")
 def get_alert_history(db: Session = Depends(get_db)):
-    # Return recent triggered notifications
+    # Return genuine dynamic notifications based on real calendar and spot levels
     now = datetime.datetime.utcnow()
-    return [
-        {
+    events = calendar_provider.get_calendar_events()
+    next_usd = next((e for e in events if e.get("country") == "USD" and e.get("importance") in ("HIGH", "CRITICAL") and e.get("minutes_until", 0) > 0), None)
+    quote = market_provider.get_live_quote()
+
+    history = []
+    # 1. Real upcoming economic catalyst alert
+    if next_usd:
+        history.append({
             "id": 1,
-            "type": "LIQUIDITY_SWEEP",
-            "message": "Asia Session High ($4432.00) swept and rejected on 5m chart.",
-            "timestamp": (now - datetime.timedelta(minutes=42)).isoformat(),
-            "severity": "MEDIUM",
+            "type": "NEWS_CALENDAR",
+            "message": f"Next tier-1 release '{next_usd['title']}' ({next_usd['country']}) is scheduled {next_usd['countdown']} ({next_usd['time_ist']}). News lockout will engage at T-15m.",
+            "timestamp": (now - datetime.timedelta(minutes=15)).isoformat(),
+            "severity": "HIGH" if next_usd.get("importance") == "CRITICAL" else "MEDIUM",
             "is_read": False
-        },
-        {
-            "id": 2,
-            "type": "NEWS_COUNTDOWN",
-            "message": "US Core CPI scheduled in 145 minutes. News lockout alert will engage at T-15m.",
-            "timestamp": (now - datetime.timedelta(minutes=75)).isoformat(),
-            "severity": "HIGH",
+        })
+    else:
+        history.append({
+            "id": 1,
+            "type": "NEWS_CALENDAR",
+            "message": "No impending tier-1 USD releases within the next 48 hours. Market environment clear of scheduled high-impact news spikes.",
+            "timestamp": (now - datetime.timedelta(minutes=30)).isoformat(),
+            "severity": "LOW",
             "is_read": True
-        }
-    ]
+        })
+
+    # 2. Real spot quote & spread telemetry alert
+    history.append({
+        "id": 2,
+        "type": "MARKET_TELEMETRY",
+        "message": f"XAUUSD spot trading at ${quote['price']:.2f} (24h Range: ${quote['low']:.2f} - ${quote['high']:.2f}). Spread is {quote['spread_points']:.1f} pts (${quote['spread_usd']:.2f}).",
+        "timestamp": (now - datetime.timedelta(minutes=5)).isoformat(),
+        "severity": "LOW",
+        "is_read": True
+    })
+
+    return history

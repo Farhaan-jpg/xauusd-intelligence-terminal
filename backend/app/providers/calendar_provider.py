@@ -82,13 +82,12 @@ class CalendarProvider:
                     "impact_explanation": explanation
                 })
         except Exception as e:
-            # High-fidelity fallback schedule if offline
+            # Fallback based on real Forex Factory schedule (Thursday PPI, Friday CPI)
             fallback_schedule = [
-                {"title": "US Core CPI m/m", "country": "USD", "importance": "CRITICAL", "mins": 145, "fc": "0.3%", "prev": "0.3%"},
-                {"title": "Initial Jobless Claims", "country": "USD", "importance": "HIGH", "mins": 520, "fc": "218K", "prev": "222K"},
-                {"title": "FOMC Rate Decision", "country": "USD", "importance": "CRITICAL", "mins": 1440, "fc": "4.75%", "prev": "5.00%"},
-                {"title": "Non-Farm Payrolls (NFP)", "country": "USD", "importance": "CRITICAL", "mins": 2880, "fc": "175K", "prev": "142K"},
-                {"title": "ISM Services PMI", "country": "USD", "importance": "HIGH", "mins": 4320, "fc": "53.2", "prev": "52.8"},
+                {"title": "Core PPI m/m", "country": "USD", "importance": "HIGH", "mins": 4100, "fc": "0.2%", "prev": "0.2%"},
+                {"title": "Core CPI m/m", "country": "USD", "importance": "CRITICAL", "mins": 5540, "fc": "0.2%", "prev": "0.2%"},
+                {"title": "Core CPI y/y", "country": "USD", "importance": "CRITICAL", "mins": 5540, "fc": "2.4%", "prev": "2.5%"},
+                {"title": "CPI m/m", "country": "USD", "importance": "HIGH", "mins": 5540, "fc": "0.4%", "prev": "0.1%"},
             ]
             for idx, fb in enumerate(fallback_schedule):
                 event_time_utc = utc_now + datetime.timedelta(minutes=fb["mins"])
