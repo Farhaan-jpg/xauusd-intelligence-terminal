@@ -61,7 +61,6 @@ export default function Header({ quote, session, activeTab, setActiveTab, onOpen
 
   const navItems = [
     { id: "command-center", label: "Command Center", icon: Layers },
-    { id: "chart", label: "Live Chart", icon: LineChart },
     { id: "macro", label: "Macro & Drivers", icon: Globe },
     { id: "liquidity", label: "Liquidity Radar", icon: Compass },
     { id: "news", label: "News & Catalysts", icon: Newspaper },
@@ -73,7 +72,7 @@ export default function Header({ quote, session, activeTab, setActiveTab, onOpen
     { id: "settings", label: "Settings", icon: Sliders },
   ];
 
-  const spread = quote ? quote.spread_points : 1.8;
+  const spread = quote ? quote.spread_points : 4.2;
   const isWideSpread = spread > 3.0;
 
   return (

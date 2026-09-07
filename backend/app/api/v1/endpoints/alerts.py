@@ -52,7 +52,7 @@ def get_alert_history(db: Session = Depends(get_db)):
         {
             "id": 1,
             "type": "LIQUIDITY_SWEEP",
-            "message": "Asia Session High ($2664.70) swept and rejected on 5m chart.",
+            "message": "Asia Session High ($4432.00) swept and rejected on 5m chart.",
             "timestamp": (now - datetime.timedelta(minutes=42)).isoformat(),
             "severity": "MEDIUM",
             "is_read": False

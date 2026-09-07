@@ -6,7 +6,6 @@ import RiskBanner from "../components/layout/RiskBanner";
 import MarketSnapshotCard from "../components/terminal/MarketSnapshotCard";
 import VerdictHeroCard from "../components/terminal/VerdictHeroCard";
 import MultiTimeframeGrid from "../components/terminal/MultiTimeframeGrid";
-import LightweightChartWrapper from "../components/terminal/LightweightChartWrapper";
 import MacroDashboard from "../components/terminal/MacroDashboard";
 import LiquidityRadarView from "../components/terminal/LiquidityRadarView";
 import EconomicCalendarView from "../components/terminal/EconomicCalendarView";
@@ -99,16 +98,6 @@ export default function TerminalPage() {
             <VerdictHeroCard verdict={verdict} />
 
             {/* Multi-Timeframe Alignment Matrix */}
-            <MultiTimeframeGrid data={mtfData} />
-
-            {/* Interactive Candlestick Chart Workspace */}
-            <LightweightChartWrapper initialTimeframe="15m" />
-          </div>
-        )}
-
-        {activeTab === "chart" && (
-          <div className="space-y-4">
-            <LightweightChartWrapper initialTimeframe="15m" />
             <MultiTimeframeGrid data={mtfData} />
           </div>
         )}

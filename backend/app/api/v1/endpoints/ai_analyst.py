@@ -40,8 +40,8 @@ def run_gold_analyst(req: AiQueryRequest):
     sup = next((l for l in levels if l["category"] == "SUPPORT"), None)
     res = next((l for l in levels if l["category"] == "RESISTANCE"), None)
     
-    sup_str = f"${sup['price']} ({sup['label']})" if sup else "$2645.00"
-    res_str = f"${res['price']} ({res['label']})" if res else "$2670.00"
+    sup_str = f"${sup['price']} ({sup['label']})" if sup else "$4400.00"
+    res_str = f"${res['price']} ({res['label']})" if res else "$4440.00"
     
     now_utc = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     

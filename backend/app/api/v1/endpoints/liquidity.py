@@ -12,19 +12,19 @@ def get_liquidity_levels():
     levels = LiquidityEngine.identify_levels(
         current_price=quote["price"],
         candles=candles,
-        pdh=quote["high"] + 2.50,
-        pdl=quote["low"] - 2.00,
-        pwh=quote["price"] + 28.0,
-        pwl=quote["price"] - 35.0,
-        asia_high=quote["price"] + 6.20,
-        asia_low=quote["price"] - 5.80,
-        london_high=quote["price"] + 9.50,
-        london_low=quote["price"] - 8.20
+        pdh=4460.00,
+        pdl=4375.00,
+        pwh=4485.00,
+        pwl=4340.00,
+        asia_high=4432.00,
+        asia_low=4395.00,
+        london_high=4448.00,
+        london_low=4382.00
     )
     
     # Also test for recent sweeps against Asia High and Previous Day Low
-    sweep_asia = LiquidityEngine.detect_sweeps(candles, quote["price"] + 6.20, "Asia Session High")
-    sweep_pdl = LiquidityEngine.detect_sweeps(candles, quote["low"] - 2.00, "Previous Day Low")
+    sweep_asia = LiquidityEngine.detect_sweeps(candles, 4432.00, "Asia Session High")
+    sweep_pdl = LiquidityEngine.detect_sweeps(candles, 4375.00, "Key Structural Demand")
     
     sweeps = []
     if sweep_asia["swept"]:

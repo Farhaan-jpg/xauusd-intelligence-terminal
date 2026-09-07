@@ -14,8 +14,8 @@ export default function JournalView() {
 
   // New trade state
   const [newDirection, setNewDirection] = useState<"LONG" | "SHORT">("LONG");
-  const [newEntry, setNewEntry] = useState<number>(2652.0);
-  const [newExit, setNewExit] = useState<number>(2664.0);
+  const [newEntry, setNewEntry] = useState<number>(4410.0);
+  const [newExit, setNewExit] = useState<number>(4422.0);
   const [newLots, setNewLots] = useState<number>(0.3);
   const [newSetup, setNewSetup] = useState<string>("ASIA_LOW_SWEEP");
   const [newSession, setNewSession] = useState<string>("LONDON");

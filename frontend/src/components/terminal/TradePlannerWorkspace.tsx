@@ -9,11 +9,11 @@ export default function TradePlannerWorkspace() {
   const [balance, setBalance] = useState<number>(10000);
   const [riskPct, setRiskPct] = useState<number>(1.0);
   const [direction, setDirection] = useState<"LONG" | "SHORT">("LONG");
-  const [entryPrice, setEntryPrice] = useState<number>(2655.0);
-  const [stopLoss, setStopLoss] = useState<number>(2649.0);
-  const [takeProfit, setTakeProfit] = useState<number>(2670.0);
+  const [entryPrice, setEntryPrice] = useState<number>(4413.20);
+  const [stopLoss, setStopLoss] = useState<number>(4405.00);
+  const [takeProfit, setTakeProfit] = useState<number>(4430.00);
   const [contractSize, setContractSize] = useState<number>(100.0);
-  const [spreadPoints, setSpreadPoints] = useState<number>(1.8);
+  const [spreadPoints, setSpreadPoints] = useState<number>(4.2);
   const [commissionPerLot, setCommissionPerLot] = useState<number>(6.0);
   const [slippagePoints, setSlippagePoints] = useState<number>(1.0);
   

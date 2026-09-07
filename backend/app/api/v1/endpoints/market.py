@@ -40,14 +40,14 @@ def get_verdict():
     nearest_liq = LiquidityEngine.identify_levels(
         current_price=quote["price"],
         candles=candles_15m,
-        pdh=quote["high"] + 2.50,
-        pdl=quote["low"] - 2.00,
-        pwh=quote["price"] + 28.0,
-        pwl=quote["price"] - 35.0,
-        asia_high=quote["price"] + 6.20,
-        asia_low=quote["price"] - 5.80,
-        london_high=quote["price"] + 9.50,
-        london_low=quote["price"] - 8.20
+        pdh=4460.0,
+        pdl=4375.0,
+        pwh=4485.0,
+        pwl=4340.0,
+        asia_high=4432.0,
+        asia_low=4395.0,
+        london_high=4448.0,
+        london_low=4382.0
     )
     
     events = calendar_provider.get_calendar_events()

@@ -7,7 +7,7 @@ import { LiquidityLevel } from "../../types/terminal";
 
 export default function LiquidityRadarView() {
   const [levels, setLevels] = useState<LiquidityLevel[]>([]);
-  const [currentPrice, setCurrentPrice] = useState<number>(2658.50);
+  const [currentPrice, setCurrentPrice] = useState<number>(4413.21);
   const [sweeps, setSweeps] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -16,7 +16,7 @@ export default function LiquidityRadarView() {
       try {
         const res = await terminalApi.getLiquidityLevels();
         setLevels(res.liquidity_levels || []);
-        setCurrentPrice(res.current_price || 2658.50);
+        setCurrentPrice(res.current_price || 4413.21);
         setSweeps(res.recent_sweeps || []);
       } catch (err) {
         console.error("Failed to load liquidity levels:", err);
