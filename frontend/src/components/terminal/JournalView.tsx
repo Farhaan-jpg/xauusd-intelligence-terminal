@@ -3,9 +3,13 @@
 import React, { useEffect, useState } from "react";
 import { BookOpen, PlusCircle, Award, CheckCircle, XCircle, BarChart3, TrendingUp, Sparkles } from "lucide-react";
 import { terminalApi } from "../../lib/api";
-import { JournalTrade } from "../../types/terminal";
+import { JournalTrade, MarketQuote } from "../../types/terminal";
 
-export default function JournalView() {
+interface JournalViewProps {
+  quote?: MarketQuote | null;
+}
+
+export default function JournalView({ quote }: JournalViewProps) {
   const [trades, setTrades] = useState<JournalTrade[]>([]);
   const [analytics, setAnalytics] = useState<any>(null);
   const [weeklyReview, setWeeklyReview] = useState<any>(null);
@@ -14,8 +18,8 @@ export default function JournalView() {
 
   // New trade state
   const [newDirection, setNewDirection] = useState<"LONG" | "SHORT">("LONG");
-  const [newEntry, setNewEntry] = useState<number>(4410.0);
-  const [newExit, setNewExit] = useState<number>(4422.0);
+  const [newEntry, setNewEntry] = useState<number>(quote?.price || 4414.80);
+  const [newExit, setNewExit] = useState<number>((quote?.price || 4414.80) + 10.0);
   const [newLots, setNewLots] = useState<number>(0.3);
   const [newSetup, setNewSetup] = useState<string>("ASIA_LOW_SWEEP");
   const [newSession, setNewSession] = useState<string>("LONDON");
@@ -23,7 +27,7 @@ export default function JournalView() {
   const [newEmotion, setNewEmotion] = useState<string>("Disciplined");
   const [newNotes, setNewNotes] = useState<string>("");
 
-  async function refreshJournal() {
+  async function refreshJournal(isInitial = false) {
     try {
       const [tList, aData, wData] = await Promise.all([
         terminalApi.getJournalTrades(),
@@ -36,12 +40,17 @@ export default function JournalView() {
     } catch (err) {
       console.error("Failed to load journal data:", err);
     } finally {
-      setLoading(false);
+      if (isInitial) setLoading(false);
     }
   }
 
   useEffect(() => {
-    refreshJournal();
+    refreshJournal(true);
+    const interval = setInterval(() => {
+      refreshJournal(false);
+    }, 8000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleCreateTrade = async () => {
@@ -280,7 +289,18 @@ export default function JournalView() {
 
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="text-[10px] text-text-muted block mb-1">Entry ($)</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-[10px] text-text-muted">Entry ($)</label>
+                    {quote && (
+                      <button
+                        type="button"
+                        onClick={() => setNewEntry(quote.price)}
+                        className="text-[9px] text-gold hover:underline font-mono"
+                      >
+                        ⚡ Spot
+                      </button>
+                    )}
+                  </div>
                   <input
                     type="number"
                     value={newEntry}
@@ -289,7 +309,18 @@ export default function JournalView() {
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] text-text-muted block mb-1">Exit ($)</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-[10px] text-text-muted">Exit ($)</label>
+                    {quote && (
+                      <button
+                        type="button"
+                        onClick={() => setNewExit(quote.price)}
+                        className="text-[9px] text-gold hover:underline font-mono"
+                      >
+                        ⚡ Spot
+                      </button>
+                    )}
+                  </div>
                   <input
                     type="number"
                     value={newExit}

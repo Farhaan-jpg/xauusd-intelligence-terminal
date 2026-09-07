@@ -11,17 +11,23 @@ export default function NewsWorkspaceView() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    async function loadNews() {
+    async function loadNews(isInitial = false) {
       try {
         const items = await terminalApi.getNewsCatalysts();
         setNews(items || []);
       } catch (err) {
         console.error("Failed to load news catalysts:", err);
       } finally {
-        setLoading(false);
+        if (isInitial) setLoading(false);
       }
     }
-    loadNews();
+
+    loadNews(true);
+    const interval = setInterval(() => {
+      loadNews(false);
+    }, 15000);
+
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -49,6 +55,10 @@ export default function NewsWorkspaceView() {
             <h2 className="font-bold text-gray-200 tracking-wider uppercase font-mono">
               News & Catalyst Intelligence
             </h2>
+            <span className="flex items-center space-x-1 px-1.5 py-0.5 rounded bg-bullish/10 border border-bullish/30 text-[9px] text-bullish font-bold font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-bullish animate-ping"></span>
+              <span>LIVE WIRE</span>
+            </span>
           </div>
 
           {/* Category Filter */}

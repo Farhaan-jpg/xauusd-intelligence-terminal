@@ -3,17 +3,21 @@
 import React, { useState, useEffect } from "react";
 import { Sliders, DollarSign, ShieldAlert, CheckCircle2, XCircle, HelpCircle, Save } from "lucide-react";
 import { terminalApi } from "../../lib/api";
-import { RiskCalculationResult } from "../../types/terminal";
+import { RiskCalculationResult, MarketQuote } from "../../types/terminal";
 
-export default function TradePlannerWorkspace() {
+interface TradePlannerWorkspaceProps {
+  quote?: MarketQuote | null;
+}
+
+export default function TradePlannerWorkspace({ quote }: TradePlannerWorkspaceProps) {
   const [balance, setBalance] = useState<number>(10000);
   const [riskPct, setRiskPct] = useState<number>(1.0);
   const [direction, setDirection] = useState<"LONG" | "SHORT">("LONG");
-  const [entryPrice, setEntryPrice] = useState<number>(4413.20);
+  const [entryPrice, setEntryPrice] = useState<number>(quote?.price || 4414.80);
   const [stopLoss, setStopLoss] = useState<number>(4405.00);
   const [takeProfit, setTakeProfit] = useState<number>(4430.00);
   const [contractSize, setContractSize] = useState<number>(100.0);
-  const [spreadPoints, setSpreadPoints] = useState<number>(4.2);
+  const [spreadPoints, setSpreadPoints] = useState<number>(quote ? quote.spread_points : 4.2);
   const [commissionPerLot, setCommissionPerLot] = useState<number>(6.0);
   const [slippagePoints, setSlippagePoints] = useState<number>(1.0);
   
@@ -154,7 +158,19 @@ export default function TradePlannerWorkspace() {
           {/* Prices: Entry, SL, TP */}
           <div className="grid grid-cols-3 gap-2">
             <div>
-              <label className="text-[10px] text-text-muted uppercase block mb-1">Entry Price ($)</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-[10px] text-text-muted uppercase">Entry ($)</label>
+                {quote && (
+                  <button
+                    type="button"
+                    onClick={() => setEntryPrice(quote.price)}
+                    className="text-[9px] text-gold hover:underline font-mono"
+                    title="Click to sync with live spot price"
+                  >
+                    ⚡ ${quote.price.toFixed(2)}
+                  </button>
+                )}
+              </div>
               <input
                 type="number"
                 step="0.1"

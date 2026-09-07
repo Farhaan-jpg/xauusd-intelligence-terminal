@@ -33,6 +33,25 @@ interface HeaderProps {
 export default function Header({ quote, session, activeTab, setActiveTab, onOpenAiModal }: HeaderProps) {
   const [istTime, setIstTime] = useState<string>("");
   const [utcTime, setUtcTime] = useState<string>("");
+  const [prevPrice, setPrevPrice] = useState<number | null>(null);
+  const [priceFlash, setPriceFlash] = useState<"up" | "down" | null>(null);
+
+  useEffect(() => {
+    if (quote && prevPrice !== null) {
+      if (quote.price > prevPrice) {
+        setPriceFlash("up");
+        const t = setTimeout(() => setPriceFlash(null), 600);
+        return () => clearTimeout(t);
+      } else if (quote.price < prevPrice) {
+        setPriceFlash("down");
+        const t = setTimeout(() => setPriceFlash(null), 600);
+        return () => clearTimeout(t);
+      }
+    }
+    if (quote) {
+      setPrevPrice(quote.price);
+    }
+  }, [quote?.price]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -111,12 +130,21 @@ export default function Header({ quote, session, activeTab, setActiveTab, onOpen
 
           <div className="h-7 w-[1px] bg-border hidden sm:block"></div>
 
-          {/* Live Quote Pill */}
+          {/* Live Quote Pill with Real-time Tick Flashes */}
           {quote ? (
-            <div className="flex items-center space-x-3 bg-card px-3 py-1.5 rounded border border-border">
-              <div>
-                <span className="text-xs font-mono font-bold text-gray-400">SPOT</span>
-                <span className="ml-1 text-sm font-bold font-tabular text-gold">
+            <div className={`flex items-center space-x-3 bg-card px-3 py-1.5 rounded border transition-all duration-300 ${
+              priceFlash === "up" 
+                ? "border-bullish bg-bullish/10 shadow-[0_0_12px_rgba(34,197,94,0.3)]" 
+                : priceFlash === "down" 
+                ? "border-bearish bg-bearish/10 shadow-[0_0_12px_rgba(239,68,68,0.3)]" 
+                : "border-border"
+            }`}>
+              <div className="flex items-center space-x-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-bullish animate-pulse"></span>
+                <span className="text-[10px] font-mono font-bold text-gray-400">SPOT</span>
+                <span className={`ml-1 text-sm font-bold font-tabular transition-colors duration-200 ${
+                  priceFlash === "up" ? "text-bullish" : priceFlash === "down" ? "text-bearish" : "text-gold"
+                }`}>
                   ${quote.price.toFixed(2)}
                 </span>
               </div>

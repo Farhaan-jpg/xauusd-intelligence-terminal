@@ -12,7 +12,7 @@ export default function AlertsCenter() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    async function loadAlerts() {
+    async function loadAlerts(isInitial = false) {
       try {
         const [aList, hList] = await Promise.all([
           terminalApi.getAlerts(),
@@ -23,10 +23,16 @@ export default function AlertsCenter() {
       } catch (err) {
         console.error("Failed to load alerts:", err);
       } finally {
-        setLoading(false);
+        if (isInitial) setLoading(false);
       }
     }
-    loadAlerts();
+
+    loadAlerts(true);
+    const interval = setInterval(() => {
+      loadAlerts(false);
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleCreate = async () => {
@@ -56,6 +62,10 @@ export default function AlertsCenter() {
             <h2 className="font-bold text-gray-200 tracking-wider uppercase font-mono">
               Alert Automation & Notification Matrix
             </h2>
+            <span className="flex items-center space-x-1 px-1.5 py-0.5 rounded bg-bullish/10 border border-bullish/30 text-[9px] text-bullish font-bold font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-bullish animate-ping"></span>
+              <span>LIVE MONITOR</span>
+            </span>
           </div>
           <span className="text-[10px] text-text-muted">Deduplicated • Rate-Limited • Opt-in Only</span>
         </div>

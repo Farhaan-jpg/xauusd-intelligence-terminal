@@ -13,7 +13,7 @@ export default function EconomicCalendarView() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    async function loadCalendar() {
+    async function loadCalendar(isInitial = false) {
       try {
         const [evList, lk] = await Promise.all([
           terminalApi.getCalendarEvents(),
@@ -21,16 +21,22 @@ export default function EconomicCalendarView() {
         ]);
         setEvents(evList || []);
         setLockout(lk);
-        if (evList && evList.length > 0) {
+        if (isInitial && evList && evList.length > 0) {
           setSelectedEvent(evList[0]);
         }
       } catch (err) {
         console.error("Failed to load calendar:", err);
       } finally {
-        setLoading(false);
+        if (isInitial) setLoading(false);
       }
     }
-    loadCalendar();
+
+    loadCalendar(true);
+    const interval = setInterval(() => {
+      loadCalendar(false);
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -57,6 +63,10 @@ export default function EconomicCalendarView() {
             <h2 className="font-bold text-gray-200 tracking-wider uppercase font-mono">
               XAUUSD Economic Catalyst Calendar
             </h2>
+            <span className="flex items-center space-x-1 px-1.5 py-0.5 rounded bg-bullish/10 border border-bullish/30 text-[9px] text-bullish font-bold font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-bullish animate-ping"></span>
+              <span>LIVE</span>
+            </span>
           </div>
 
           {/* Filter Pills */}

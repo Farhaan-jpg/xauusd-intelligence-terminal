@@ -54,17 +54,40 @@ export default function TerminalPage() {
 
     loadTerminalData();
 
-    // Pulse live quote updates every 2.0s
-    const interval = setInterval(async () => {
+    // 1. High-frequency live quote stream (every 1.0s)
+    const quoteInterval = setInterval(async () => {
       try {
-        const q = await terminalApi.getQuote();
+        const [q, s] = await Promise.all([
+          terminalApi.getQuote(),
+          terminalApi.getSessions(),
+        ]);
         setQuote(q);
+        setSession(s);
       } catch (e) {
         // silent fallback
       }
-    }, 2000);
+    }, 1000);
 
-    return () => clearInterval(interval);
+    // 2. High-frequency multi-timeframe and verdict alignment pulse (every 4.0s)
+    const mtfInterval = setInterval(async () => {
+      try {
+        const [vRes, mtf] = await Promise.all([
+          terminalApi.getVerdict(),
+          terminalApi.getMultiTimeframe(),
+        ]);
+        setVerdict(vRes.verdict);
+        setNextEvent(vRes.next_catalyst);
+        setIsLockout(vRes.lockout_status?.is_locked_out || false);
+        setMtfData(mtf);
+      } catch (e) {
+        // silent fallback
+      }
+    }, 4000);
+
+    return () => {
+      clearInterval(quoteInterval);
+      clearInterval(mtfInterval);
+    };
   }, []);
 
   return (
@@ -106,8 +129,8 @@ export default function TerminalPage() {
         {activeTab === "liquidity" && <LiquidityRadarView />}
         {activeTab === "news" && <NewsWorkspaceView />}
         {activeTab === "calendar" && <EconomicCalendarView />}
-        {activeTab === "planner" && <TradePlannerWorkspace />}
-        {activeTab === "journal" && <JournalView />}
+        {activeTab === "planner" && <TradePlannerWorkspace quote={quote} />}
+        {activeTab === "journal" && <JournalView quote={quote} />}
         {activeTab === "alerts" && <AlertsCenter />}
         {activeTab === "analytics" && <AnalyticsAccuracyView />}
         {activeTab === "settings" && <SettingsView />}

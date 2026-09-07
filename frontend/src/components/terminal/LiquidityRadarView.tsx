@@ -12,7 +12,7 @@ export default function LiquidityRadarView() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    async function loadLiquidity() {
+    async function loadLiquidity(isInitial = false) {
       try {
         const res = await terminalApi.getLiquidityLevels();
         setLevels(res.liquidity_levels || []);
@@ -21,10 +21,16 @@ export default function LiquidityRadarView() {
       } catch (err) {
         console.error("Failed to load liquidity levels:", err);
       } finally {
-        setLoading(false);
+        if (isInitial) setLoading(false);
       }
     }
-    loadLiquidity();
+
+    loadLiquidity(true);
+    const interval = setInterval(() => {
+      loadLiquidity(false);
+    }, 2500);
+
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -48,9 +54,16 @@ export default function LiquidityRadarView() {
             <h2 className="font-bold text-gray-200 tracking-wider uppercase font-mono">
               XAUUSD Liquidity Radar & Stop-Interest Map
             </h2>
+            <span className="flex items-center space-x-1 px-1.5 py-0.5 rounded bg-bullish/10 border border-bullish/30 text-[9px] text-bullish font-bold font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-bullish animate-ping"></span>
+              <span>LIVE</span>
+            </span>
           </div>
-          <div className="text-[11px] font-mono font-bold text-gold bg-surface px-2.5 py-1 rounded border border-border">
-            SPOT: ${currentPrice.toFixed(2)}
+          <div className="flex items-center space-x-2">
+            <span className="text-[10px] text-text-muted hidden sm:inline">2.5s Structural Scan</span>
+            <div className="text-[11px] font-mono font-bold text-gold bg-surface px-2.5 py-1 rounded border border-border shadow-sm">
+              SPOT: ${currentPrice.toFixed(2)}
+            </div>
           </div>
         </div>
 

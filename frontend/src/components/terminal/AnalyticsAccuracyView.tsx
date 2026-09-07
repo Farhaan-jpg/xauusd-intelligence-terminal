@@ -9,17 +9,23 @@ export default function AnalyticsAccuracyView() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    async function loadAnalytics() {
+    async function loadAnalytics(isInitial = false) {
       try {
         const data = await terminalApi.getJournalAnalytics();
         setAnalytics(data);
       } catch (err) {
         console.error("Failed to load analytics:", err);
       } finally {
-        setLoading(false);
+        if (isInitial) setLoading(false);
       }
     }
-    loadAnalytics();
+
+    loadAnalytics(true);
+    const interval = setInterval(() => {
+      loadAnalytics(false);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -39,6 +45,10 @@ export default function AnalyticsAccuracyView() {
             <h2 className="font-bold text-gray-200 tracking-wider uppercase font-mono">
               Quantitative Edge & Discretionary Performance Analytics
             </h2>
+            <span className="flex items-center space-x-1 px-1.5 py-0.5 rounded bg-bullish/10 border border-bullish/30 text-[9px] text-bullish font-bold font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-bullish animate-ping"></span>
+              <span>LIVE</span>
+            </span>
           </div>
           <span className="text-[10px] text-text-muted">Backtest-Free: Reflects Pure Journaled Real-Money History</span>
         </div>

@@ -11,7 +11,7 @@ export default function MacroDashboard() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    async function loadMacro() {
+    async function loadMacro(isInitial = false) {
       try {
         const [d, s] = await Promise.all([
           terminalApi.getMacroDrivers(),
@@ -22,10 +22,16 @@ export default function MacroDashboard() {
       } catch (err) {
         console.error("Failed to load macro data:", err);
       } finally {
-        setLoading(false);
+        if (isInitial) setLoading(false);
       }
     }
-    loadMacro();
+
+    loadMacro(true);
+    const interval = setInterval(() => {
+      loadMacro(false);
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -50,6 +56,10 @@ export default function MacroDashboard() {
             <h2 className="font-bold text-gray-200 tracking-wider uppercase font-mono">
               Aggregated Macro Driver Bias
             </h2>
+            <span className="flex items-center space-x-1 px-1.5 py-0.5 rounded bg-bullish/10 border border-bullish/30 text-[9px] text-bullish font-bold font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-bullish animate-ping"></span>
+              <span>LIVE</span>
+            </span>
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-text-muted">Macro Regime:</span>
