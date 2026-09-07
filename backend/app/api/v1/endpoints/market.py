@@ -25,6 +25,7 @@ def get_candles(timeframe: str = Query("15m", pattern="^(1m|5m|15m|1h|4h|1d)$"),
     return market_provider.generate_historical_candles(timeframe=timeframe, count=count)
 
 @router.get("/multitimeframe")
+@router.get("/multi-timeframe")
 def get_multitimeframe():
     return market_provider.get_multi_timeframe_matrix()
 
@@ -37,17 +38,24 @@ def get_verdict():
     drivers = macro_provider.get_macro_drivers()
     macro_res = MacroEngine.evaluate_macro_bias(drivers)
     
+    pdh = quote["high"]
+    pdl = quote["low"]
+    recent_highs = [c["high"] for c in candles_15m[-24:]] if candles_15m else [quote["high"]]
+    recent_lows = [c["low"] for c in candles_15m[-24:]] if candles_15m else [quote["low"]]
+    asia_high = round(max(recent_highs), 2)
+    asia_low = round(min(recent_lows), 2)
+
     nearest_liq = LiquidityEngine.identify_levels(
         current_price=quote["price"],
         candles=candles_15m,
-        pdh=4460.0,
-        pdl=4375.0,
-        pwh=4485.0,
-        pwl=4340.0,
-        asia_high=4432.0,
-        asia_low=4395.0,
-        london_high=4448.0,
-        london_low=4382.0
+        pdh=pdh,
+        pdl=pdl,
+        pwh=round(pdh + 25.0, 2),
+        pwl=round(pdl - 25.0, 2),
+        asia_high=asia_high,
+        asia_low=asia_low,
+        london_high=round(pdh, 2),
+        london_low=round(pdl, 2)
     )
     
     events = calendar_provider.get_calendar_events()

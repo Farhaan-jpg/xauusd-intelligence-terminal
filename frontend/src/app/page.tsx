@@ -54,7 +54,7 @@ export default function TerminalPage() {
 
     loadTerminalData();
 
-    // Pulse quote updates every 3.5s
+    // Pulse live quote updates every 2.0s
     const interval = setInterval(async () => {
       try {
         const q = await terminalApi.getQuote();
@@ -62,7 +62,7 @@ export default function TerminalPage() {
       } catch (e) {
         // silent fallback
       }
-    }, 3500);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, []);
